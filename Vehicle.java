@@ -1,5 +1,6 @@
 public class Vehicle
 {
+    // Class to store relevant information about the vehicles
     private String destination;
     private long entryTime;
     private long parkTime;
@@ -12,6 +13,7 @@ public class Vehicle
 
     }
 
+    // Getters and Setters
     public void setParkTime(long parkTime)
     {
         this.parkTime = parkTime;
