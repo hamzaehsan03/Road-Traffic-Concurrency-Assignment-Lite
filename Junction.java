@@ -60,40 +60,7 @@ public class Junction extends Thread {
             {
                 Thread.currentThread().interrupt();
             }
-            
 
-        //     if (currentTime < greenLightStart + greenDuration)
-        //     {
-        //         // Light's Green
-        //         Vehicle vehicle = entryRoad.consumeVehicle();
-        //         if (vehicle != null && exitRoad.addVehicle(vehicle))
-        //         {
-        //             // 60/12 = 5 seconds perVehicle
-        //             try
-        //             {
-        //                 clock.waitForAdditionalTime(5000);
-        //             }
-        //             catch (InterruptedException e)
-        //             {
-        //                 Thread.currentThread().interrupt();
-        //             }
-
-        //         }
-        //         else
-        //         {
-        //             // If the exit road is full or there's no cars, wait for the next tick
-        //             try
-        //             {
-        //                 clock.waitTick();
-        //             }
-        //             catch(InterruptedException e)
-        //             {
-        //                 Thread.currentThread().interrupt();
-        //             }
-        //         }
-        //     }
-        // }
-        // System.out.println(junctionName + ": Simulation end. Total cars passed: " + carsPassed);
         }
     }
 
