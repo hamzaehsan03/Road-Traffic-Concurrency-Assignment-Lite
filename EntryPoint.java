@@ -18,7 +18,8 @@ public class EntryPoint extends Thread {
     @Override
     public void run()
     {
-        long interval = 3600 / carsPH * 1000; 
+        
+        long interval = (3600 / carsPH) * 1000 / 360; 
         while (!Thread.currentThread().isInterrupted())
         {
             long elapsed = clock.getCurrentTime();
@@ -28,14 +29,34 @@ public class EntryPoint extends Thread {
             }
 
             try{
-                Vehicle vehicle = new Vehicle(destination, elapsed);
-                if (road.addVehicle(vehicle))
+
+                if (road.hasSpace())
                 {
-                    clock.waitTick(); // synchronise
+                    Vehicle vehicle = new Vehicle(destination, elapsed);
+                    System.out.println("Creating vehicle at EntryPoint with destination: " + destination + " at time: " + elapsed);
+                    if (road.addVehicle(vehicle))
+                    {
+                        System.out.println("Vehicle added to road from EntryPoint: " + destination);
+                    }
+
+                    else
+                    {
+                        System.out.println("Road is full, vehicle not added from EntryPoint: " + destination);
+                    }
+                    //road.addVehicle(vehicle);
+                    Thread.sleep(interval);
+                   
                 }
+
+                // Vehicle vehicle = new Vehicle(destination, elapsed);
+                // if (road.addVehicle(vehicle))
+                // {
+                //     Thread.sleep(interval); // synchronise
+                // }
                 else{
                     clock.waitTick(); // synchronise
                 }
+                
             } catch(InterruptedException e)
             {
                 Thread.currentThread().interrupt();

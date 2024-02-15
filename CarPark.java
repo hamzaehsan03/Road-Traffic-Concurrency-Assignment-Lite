@@ -25,6 +25,7 @@ public class CarPark extends Thread {
                 Vehicle vehicle = destinationRoad.consumeVehicle();
                 if (vehicle != null)
                 {
+                    System.out.println(parkName + ": Car attempting to park at " + clock.getCurrentTime() + " seconds.");
                     long parkTimeElapsed = clock.getCurrentTime();
                     vehicle.setParkTime(parkTimeElapsed);
                     parkedTime += parkTimeElapsed - vehicle.getEntryTime();
@@ -34,11 +35,15 @@ public class CarPark extends Thread {
                     
                     try
                     {
-                        clock.waitForAdditionalTime(12000); // 12s
+                        clock.waitForAdditionalTime(1200); // 12s
                     } catch (InterruptedException e)
                     {
                         Thread.currentThread().interrupt();
                     }
+                }
+                if (totalParked >= capacity)
+                {
+                    System.out.println(parkName + " is full.");
                 }
 
                 else 
