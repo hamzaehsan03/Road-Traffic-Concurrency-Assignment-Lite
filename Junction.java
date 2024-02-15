@@ -66,21 +66,36 @@ public class Junction extends Thread {
 
     private void processVehicles()
     {
-
-        if (exitRoad.hasSpace())
+        if (isGreen)
         {
             Vehicle vehicle = entryRoad.consumeVehicle();
-            if (vehicle != null) {
+            if (vehicle != null && exitRoad.hasSpace())
+            {
+                exitRoad.addVehicle(vehicle);
                 carsPassed++;
-    
-                // Simulate the vehicle moving through the junction for 5 seconds
-                try {
-                    clock.waitForAdditionalTime(5000 / 360); // Adjusted for the simulation speed
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+                System.out.println(junctionName + ": Vehicle passed from entryRoad to exitRoad");
+                
             }
         }
+        else
+        {
+            System.out.println(junctionName + ": Cannot pass vehicle, either no vehicle or exitRoad is full");
+        }
+
+        // if (exitRoad.hasSpace())
+        // {
+        //     Vehicle vehicle = entryRoad.consumeVehicle();
+        //     if (vehicle != null) {
+        //         carsPassed++;
+    
+        //         // Simulate the vehicle moving through the junction for 5 seconds
+        //         try {
+        //             clock.waitForAdditionalTime(5000 / 360); // Adjusted for the simulation speed
+        //         } catch (InterruptedException e) {
+        //             Thread.currentThread().interrupt();
+        //         }
+        //     }
+        // }
 
         
     }

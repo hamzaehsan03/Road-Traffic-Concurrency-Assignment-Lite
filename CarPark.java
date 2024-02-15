@@ -25,13 +25,13 @@ public class CarPark extends Thread {
                 Vehicle vehicle = destinationRoad.consumeVehicle();
                 if (vehicle != null)
                 {
-                    System.out.println(parkName + ": Car attempting to park at " + clock.getCurrentTime() + " seconds.");
+                    System.out.println(parkName + ": Car attempting to park at " + clock.getCurrentTime()/1000 + " seconds.");
                     long parkTimeElapsed = clock.getCurrentTime();
                     vehicle.setParkTime(parkTimeElapsed);
                     parkedTime += parkTimeElapsed - vehicle.getEntryTime();
                     totalParked++;
 
-                    System.out.println(parkName + ": Car parked at " + clock.getCurrentTime() + " seconds. Total cars parked: " + totalParked);
+                    System.out.println(parkName + ": Car parked at " + clock.getCurrentTime()/1000 + " seconds. Total cars parked: " + totalParked);
                     
                     try
                     {
@@ -67,6 +67,6 @@ public class CarPark extends Thread {
         }
         
         long avgParkTime = totalParked > 0 ? parkedTime / totalParked : 0;
-        System.out.println(parkName + ": Simulation end. Average parking time: " + avgParkTime + " seconds");
+        System.out.println(parkName + ": Simulation end. Average parking time: " + avgParkTime/1000 + " seconds");
     }
 }

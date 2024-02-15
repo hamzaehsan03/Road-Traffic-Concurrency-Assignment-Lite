@@ -7,6 +7,7 @@ public class Main {
 
         int entryRate = 550;
         int roadCapacity = 60;
+        int exitRoadCapacity = 15;
         int carParkCapacity = 1000;
         long greenDuration = 60;
         long simDuration = 3600000; // 3,600,000
@@ -14,10 +15,12 @@ public class Main {
 
 
         Clock clock = new Clock(simDuration, tickDuration);
-        Road carParkRoad = new Road(roadCapacity);
-        CarPark industrial = new CarPark(carParkRoad, carParkCapacity, "Industrial Park", clock);
-        Junction junctionA = new Junction(carParkRoad, carParkRoad, greenDuration, "A", clock);
-        EntryPoint entryPoint = new EntryPoint(carParkRoad, entryRate, "Industrial Park", clock);
+        Road entryRoad = new Road(roadCapacity);
+        Road exitRoad = new Road(exitRoadCapacity);
+
+        Junction junctionA = new Junction(entryRoad, exitRoad, greenDuration, "A", clock);
+        CarPark industrial = new CarPark(exitRoad, carParkCapacity, "Industrial Park", clock);      
+        EntryPoint entryPoint = new EntryPoint(entryRoad, entryRate, "Industrial Park", clock);
 
         clock.start();
         industrial.start();
