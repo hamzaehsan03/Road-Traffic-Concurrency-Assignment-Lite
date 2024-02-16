@@ -1,3 +1,5 @@
+import java.io.*;
+
 public class Junction extends Thread {
 
     private final Road entryRoad;
@@ -15,6 +17,19 @@ public class Junction extends Thread {
         this.greenDuration = greenDuration;
         this.junctionName = junctionName;
         this.clock = clock;
+    }
+
+    private void logActivity(String message)
+    {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(junctionName + "_log.txt" , true)))
+        {
+            writer.write(message);
+            writer.newLine();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -50,6 +65,19 @@ public class Junction extends Thread {
             else
             {
                 System.out.println(junctionName + " traffic light is red.");
+                String logMessage;
+                if (entryRoad.getCount() > 0 && !exitRoad.hasSpace())
+                {
+                    logMessage = String.format("Time: %dm%ds - %s: 0 cars through, %d cars waiting. GRIDLOCK", (currentTime / 1000) / 60,
+                    (currentTime / 1000) % 60, junctionName, entryRoad.getCount());
+                }
+                else
+                {
+                    logMessage = String.format("Time: %dm%ds - %s: %d cars through, %d cars waiting.", (currentTime / 1000) / 60,
+                    (currentTime / 1000) % 60, junctionName, carsPassed, entryRoad.getCount());
+                }
+
+                logActivity(logMessage);
             }
 
             try
