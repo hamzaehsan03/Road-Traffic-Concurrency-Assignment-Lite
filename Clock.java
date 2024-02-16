@@ -4,11 +4,18 @@ public class Clock extends Thread {
     private final long tickDuration; // Real time duration of the simulation, 1s real to 10s simulated
     private long currentTime = 0; // Start at 0
 
+    private CarPark industrial;
+
     public Clock(long duration, long tickDuration)
     {
         this.duration = duration;
         this.tickDuration = tickDuration;
         
+    }
+
+    public void setIndustrial(CarPark industrial)
+    {
+        this.industrial = industrial;
     }
 
     @Override
@@ -21,18 +28,30 @@ public class Clock extends Thread {
             while(currentTime < duration)
             {
                 Thread.sleep(tickDuration);
-                currentTime += tickDuration * 10;
+                //currentTime += tickDuration * 10;
 
                 synchronized(this)
                 {
+                    currentTime += tickDuration * 10;
                     //currentTime++;
                     this.notifyAll();
+                }
+
+                if (currentTime % (10 * 60 * 100) == 0)
+                {
+                    reportSpaces();
                 }
             }
         } catch(InterruptedException e)
         {
             Thread.currentThread().interrupt();
         }
+    }
+
+    private void reportSpaces()
+    {
+        int spacesAvailable = industrial.getCapacity() - industrial.getTotalParked();
+        System.out.printf("Time: %dm Industrial Park: %03d Spaces\n", currentTime / 6000, spacesAvailable);
     }
     
     // Getter

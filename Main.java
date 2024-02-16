@@ -22,8 +22,10 @@ public class Main {
         CarPark industrial = new CarPark(exitRoad, carParkCapacity, "Industrial Park", clock);      
         EntryPoint entryPoint = new EntryPoint(entryRoad, entryRate, "Industrial Park", clock);
 
-        clock.start();
+        clock.setIndustrial(industrial);
+        
         industrial.start();
+        clock.start();
         junctionA.start();
         entryPoint.start();
 

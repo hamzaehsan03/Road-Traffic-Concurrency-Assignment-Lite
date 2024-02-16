@@ -35,7 +35,7 @@ public class CarPark extends Thread {
                     
                     try
                     {
-                        clock.waitForAdditionalTime(1200); // 12s
+                        clock.waitForAdditionalTime(12000); // 12s
                     } catch (InterruptedException e)
                     {
                         Thread.currentThread().interrupt();
@@ -67,6 +67,25 @@ public class CarPark extends Thread {
         }
         
         long avgParkTime = totalParked > 0 ? parkedTime / totalParked : 0;
-        System.out.println(parkName + ": Simulation end. Average parking time: " + avgParkTime/1000 + " seconds");
+        System.out.println(parkName + ":" + totalParked + " Cars parked. Average parking time: " + (avgParkTime/1000)/60 + "m " + (avgParkTime/1000)%60 + "s");
+        // FinalLog = String.format("%d: %d Cars Parked. Average parking time: %dm%ds", (parkName, totalParked, (avgParkTime/1000)/60, (avgParkTime/1000) % 60));
+        // System.out.println(FinalLog);
+        // logMessage = String.format("Time: %dm%ds - %s: 0 cars through, %d cars waiting. GRIDLOCK", (currentTime / 1000) / 60,
+        //             (currentTime / 1000) % 60, junctionName, entryRoad.getCount());
+    }
+
+    public int getCapacity()
+    {
+        return capacity;
+    }
+
+    public int getTotalParked()
+    {
+        return totalParked;
+    }
+
+    public int getAvailableSpaces()
+    {
+        return capacity - totalParked;
     }
 }

@@ -92,23 +92,50 @@ public class Junction extends Thread {
         }
     }
 
-    private void processVehicles()
-    {
-        if (isGreen)
-        {
+    private void processVehicles() {
+        while (isGreen && carsPassed < 12) { // Assuming 12 cars can pass per minute
             Vehicle vehicle = entryRoad.consumeVehicle();
-            if (vehicle != null && exitRoad.hasSpace())
-            {
+            if (vehicle != null && exitRoad.hasSpace()) {
                 exitRoad.addVehicle(vehicle);
                 carsPassed++;
                 System.out.println(junctionName + ": Vehicle passed from entryRoad to exitRoad");
                 
+                try {
+                    // Sleep for the time it takes one car to move through the junction
+                    clock.waitForAdditionalTime(5000); // Wait for 5 simulated seconds
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return; // Stop processing if interrupted
+                }
+            } else {
+                // If no vehicle or exit road is full, break the loop and log the gridlock
+                if (vehicle == null) {
+                    System.out.println(junctionName + ": No vehicle to pass.");
+                }
+                if (!exitRoad.hasSpace()) {
+                    System.out.println(junctionName + ": Exit road is full, cannot pass vehicle.");
+                }
+                break;
             }
         }
-        else
-        {
-            System.out.println(junctionName + ": Cannot pass vehicle, either no vehicle or exitRoad is full");
-        }
+
+    // private void processVehicles()
+    // {
+    //     if (isGreen)
+    //     {
+    //         Vehicle vehicle = entryRoad.consumeVehicle();
+    //         if (vehicle != null && exitRoad.hasSpace())
+    //         {
+    //             exitRoad.addVehicle(vehicle);
+    //             carsPassed++;
+    //             System.out.println(junctionName + ": Vehicle passed from entryRoad to exitRoad");
+                
+    //         }
+    //     }
+    //     else
+    //     {
+    //         System.out.println(junctionName + ": Cannot pass vehicle, either no vehicle or exitRoad is full");
+    //     }
 
         // if (exitRoad.hasSpace())
         // {

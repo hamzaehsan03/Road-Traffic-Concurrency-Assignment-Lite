@@ -19,7 +19,7 @@ public class EntryPoint extends Thread {
     public void run()
     {
         
-        long interval = (3600 / carsPH) * 1000 / 360; 
+        long interval = (3600 / carsPH) * 1000 / 10; 
         while (!Thread.currentThread().isInterrupted())
         {
             long elapsed = clock.getCurrentTime();
