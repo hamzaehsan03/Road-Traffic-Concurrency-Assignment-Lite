@@ -10,9 +10,7 @@ public class Main {
 
     public static void main(String[] args)
     {
-        // I forgot the word but I'm temporarily putting in the variables that will be read from a config file
-        // Update: Hardcoding
-
+        
         String filePath = (".\\Task 1 Scenarios\\Scenario4.txt");
         readConfigFile(filePath);
         System.out.println("Reading from Config file");

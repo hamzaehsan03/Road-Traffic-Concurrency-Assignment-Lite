@@ -100,7 +100,8 @@ public class Junction extends Thread {
     }
 
     private void processVehicles() {
-        while (isGreen && carsPassed < 12) { // Assuming 12 cars can pass per minute
+        while (isGreen && carsPassed < 12) // 12 cars can pass per minute
+        { 
             Vehicle vehicle = entryRoad.consumeVehicle();
             if (vehicle != null && exitRoad.hasSpace()) {
                 exitRoad.addVehicle(vehicle);
