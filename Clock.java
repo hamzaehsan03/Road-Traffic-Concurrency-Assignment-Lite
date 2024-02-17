@@ -37,7 +37,7 @@ public class Clock extends Thread {
                     this.notifyAll();
                 }
 
-                if (currentTime % (10 * 60 * 100) == 0)
+                if (currentTime % (10 * 60 * 1000) == 0)
                 {
                     reportSpaces();
                 }
@@ -51,7 +51,7 @@ public class Clock extends Thread {
     private void reportSpaces()
     {
         int spacesAvailable = industrial.getCapacity() - industrial.getTotalParked();
-        System.out.printf("Time: %dm Industrial Park: %03d Spaces\n", currentTime / 6000, spacesAvailable);
+        System.out.printf("Time: %dm Industrial Park: %03d Spaces\n", currentTime / 60000, spacesAvailable);
     }
     
     // Getter
