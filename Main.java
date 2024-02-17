@@ -1,18 +1,32 @@
+import java.util.*;
+import java.util.stream.Stream;
+import java.io.*;
+import java.nio.file.*;
+
 public class Main {
+
+    private static final HashMap<String, Integer> entryPoints = new HashMap<>();
+    private static final HashMap<String, Integer> junctions = new HashMap<>();
 
     public static void main(String[] args)
     {
         // I forgot the word but I'm temporarily putting in the variables that will be read from a config file
         // Update: Hardcoding
 
-        int entryRate = 550;
+        String filePath = (".\\Task 1 Scenarios\\Scenario4.txt");
+        readConfigFile(filePath);
+        System.out.println("Reading from Config file");
+        outputConfig(filePath);
+
+        int entryRate = entryPoints.getOrDefault("south", 550); // Default to 550 
+        long greenDuration = junctions.getOrDefault("A", 60); // Default to 60 
+        //int entryRate = 550;
         int roadCapacity = 60;
         int exitRoadCapacity = 15;
         int carParkCapacity = 1000;
-        long greenDuration = 60;
+        //long greenDuration = 60;
         long simDuration = 3600000; // 3,600,000
         long tickDuration = 1000; // 3 600 000 /1000 = 3600 多分
-
 
         Clock clock = new Clock(simDuration, tickDuration);
         Road entryRoad = new Road(roadCapacity);
@@ -21,6 +35,9 @@ public class Main {
         Junction junctionA = new Junction(entryRoad, exitRoad, greenDuration, "A", clock);
         CarPark industrial = new CarPark(exitRoad, carParkCapacity, "Industrial Park", clock);      
         EntryPoint entryPoint = new EntryPoint(entryRoad, entryRate, "Industrial Park", clock);
+
+        // System.out.println(entryRate);
+        // System.out.println(greenDuration);
 
         clock.setIndustrial(industrial);
         
@@ -80,6 +97,66 @@ public class Main {
         {
             System.out.println("Mismatch");
         }
+    }
+
+    private static void outputConfig(String filePath)
+    {
+        try (Stream<String> stream = Files.lines(Paths.get(filePath))) 
+        {
+        stream.forEach(System.out::println);
+        } catch (IOException e) 
+        {
+        System.err.println("Error reading log file: " + e.getMessage());
+        }
+    }
+
+    private static void readConfigFile(String filePath)
+    {
+        try(Scanner scanner = new Scanner(new File(filePath)))
+        {
+            boolean readEntry = false;
+            boolean readJunction = false;
+
+            while (scanner.hasNextLine())
+            {
+                String line = scanner.nextLine().trim();
+                if (line.equalsIgnoreCase("ENTRYPOINTS"))
+                {
+                    readEntry = true;
+                    readJunction = false;
+                    continue;
+                }
+                else if (line.equalsIgnoreCase("JUNCTIONS"))
+                {
+                    readEntry = false;
+                    readJunction = true;
+                    continue;
+                }
+
+                if (readEntry) 
+                {
+                    String[] parts = line.split(" ");
+                    if (parts.length == 2) 
+                    {
+                        entryPoints.put(parts[0].toLowerCase(), Integer.parseInt(parts[1]));
+                    }
+                } 
+                else if (readJunction) 
+                {
+                    String[] parts = line.split(" ");
+                    if (parts.length == 2)
+                    {
+                        junctions.put(parts[0].toUpperCase(), Integer.parseInt(parts[1]));
+                    }
+                }
+            
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Configuration file not found: " + e.getMessage());
+            
+        } catch (NumberFormatException e) {
+            System.err.println("Error parsing configuration: " + e.getMessage());
+        }   
     }
 
     
