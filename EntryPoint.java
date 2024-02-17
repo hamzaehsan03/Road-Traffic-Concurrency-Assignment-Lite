@@ -47,7 +47,7 @@ public class EntryPoint extends Thread {
 
             try{
 
-                if (road.hasSpace())
+                if (road.hasSpace() && road.getCount() <= 60)
                 {
                     Vehicle vehicle = new Vehicle(destination, elapsed);
                     //System.out.println("Creating vehicle at EntryPoint with destination: " + destination + " at time: " + elapsed);
@@ -72,7 +72,8 @@ public class EntryPoint extends Thread {
                 // {
                 //     Thread.sleep(interval); // synchronise
                 // }
-                else{
+                else
+                {
                     if (!running) break;
                     clock.waitTick(); // synchronise
                 }
