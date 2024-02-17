@@ -6,6 +6,8 @@ public class EntryPoint extends Thread {
     private final int carsPH;
     private final String destination;
     private final Clock clock; // Use the simulated clock for timing
+    private static int totalCreated = 0;
+    private volatile boolean running = true;
 
     public EntryPoint(Road road, int carsPH, String destination, Clock clock)
     {
@@ -15,12 +17,27 @@ public class EntryPoint extends Thread {
         this.clock = clock;
     }
 
+    public void shutdown()
+    {
+        this.running = false;
+    }
+
+    public static synchronized void incrementTotalCreated()
+    {
+        totalCreated++;
+    }
+
+    public static synchronized int getTotalCreated()
+    {
+        return totalCreated;
+    }
+
     @Override
     public void run()
     {
         
         long interval = (3600 / carsPH) * 1000 / 10; 
-        while (!Thread.currentThread().isInterrupted())
+        while (running && !Thread.currentThread().isInterrupted())
         {
             long elapsed = clock.getCurrentTime();
             if (elapsed >= 3600*1000)
@@ -33,17 +50,19 @@ public class EntryPoint extends Thread {
                 if (road.hasSpace())
                 {
                     Vehicle vehicle = new Vehicle(destination, elapsed);
-                    System.out.println("Creating vehicle at EntryPoint with destination: " + destination + " at time: " + elapsed);
+                    //System.out.println("Creating vehicle at EntryPoint with destination: " + destination + " at time: " + elapsed);
                     if (road.addVehicle(vehicle))
                     {
-                        System.out.println("Vehicle added to road from EntryPoint: " + destination);
+                        //System.out.println("Vehicle added to road from EntryPoint: " + destination);
+                        EntryPoint.incrementTotalCreated();
                     }
 
                     else
                     {
-                        System.out.println("Road is full, vehicle not added from EntryPoint: " + destination);
+                        //System.out.println("Road is full, vehicle not added from EntryPoint: " + destination);
                     }
                     //road.addVehicle(vehicle);
+                    if (!running) break;
                     Thread.sleep(interval);
                    
                 }
@@ -54,6 +73,7 @@ public class EntryPoint extends Thread {
                 //     Thread.sleep(interval); // synchronise
                 // }
                 else{
+                    if (!running) break;
                     clock.waitTick(); // synchronise
                 }
                 

@@ -9,6 +9,7 @@ public class Junction extends Thread {
     private boolean isGreen;
     private final Clock clock;
     private int carsPassed = 0;
+    private volatile boolean running = true;
 
     public Junction(Road entryRoad, Road exitRoad, long greenDuration, String junctionName, Clock clock)
     {
@@ -17,6 +18,11 @@ public class Junction extends Thread {
         this.greenDuration = greenDuration;
         this.junctionName = junctionName;
         this.clock = clock;
+    }
+
+    public void shutdown()
+    {
+        this.running = false;
     }
 
     private void logActivity(String message)
@@ -37,7 +43,7 @@ public class Junction extends Thread {
     {
         long greenLightStart = clock.getCurrentTime();
 
-        while(!Thread.currentThread().isInterrupted())
+        while(running && !Thread.currentThread().isInterrupted())
         {
             long currentTime = clock.getCurrentTime();
             //long elapsedTime = currentTime - greenLightStart;
@@ -59,12 +65,12 @@ public class Junction extends Thread {
 
             if (isGreen)
             {
-                System.out.println(junctionName + " traffic light is green.");
+                //System.out.println(junctionName + " traffic light is green.");
                 processVehicles();
             }
             else
             {
-                System.out.println(junctionName + " traffic light is red.");
+                //System.out.println(junctionName + " traffic light is red.");
                 String logMessage;
                 if (entryRoad.getCount() > 0 && !exitRoad.hasSpace())
                 {
@@ -82,6 +88,7 @@ public class Junction extends Thread {
 
             try
             {
+                if (!running) break;
                 clock.waitTick();
             }
             catch(InterruptedException e)
@@ -98,7 +105,7 @@ public class Junction extends Thread {
             if (vehicle != null && exitRoad.hasSpace()) {
                 exitRoad.addVehicle(vehicle);
                 carsPassed++;
-                System.out.println(junctionName + ": Vehicle passed from entryRoad to exitRoad");
+               // System.out.println(junctionName + ": Vehicle passed from entryRoad to exitRoad");
                 
                 try {
                     // Sleep for the time it takes one car to move through the junction
@@ -110,48 +117,14 @@ public class Junction extends Thread {
             } else {
                 // If no vehicle or exit road is full, break the loop and log the gridlock
                 if (vehicle == null) {
-                    System.out.println(junctionName + ": No vehicle to pass.");
+                    //System.out.println(junctionName + ": No vehicle to pass.");
                 }
                 if (!exitRoad.hasSpace()) {
-                    System.out.println(junctionName + ": Exit road is full, cannot pass vehicle.");
+                    //System.out.println(junctionName + ": Exit road is full, cannot pass vehicle.");
                 }
                 break;
             }
         }
-
-    // private void processVehicles()
-    // {
-    //     if (isGreen)
-    //     {
-    //         Vehicle vehicle = entryRoad.consumeVehicle();
-    //         if (vehicle != null && exitRoad.hasSpace())
-    //         {
-    //             exitRoad.addVehicle(vehicle);
-    //             carsPassed++;
-    //             System.out.println(junctionName + ": Vehicle passed from entryRoad to exitRoad");
-                
-    //         }
-    //     }
-    //     else
-    //     {
-    //         System.out.println(junctionName + ": Cannot pass vehicle, either no vehicle or exitRoad is full");
-    //     }
-
-        // if (exitRoad.hasSpace())
-        // {
-        //     Vehicle vehicle = entryRoad.consumeVehicle();
-        //     if (vehicle != null) {
-        //         carsPassed++;
-    
-        //         // Simulate the vehicle moving through the junction for 5 seconds
-        //         try {
-        //             clock.waitForAdditionalTime(5000 / 360); // Adjusted for the simulation speed
-        //         } catch (InterruptedException e) {
-        //             Thread.currentThread().interrupt();
-        //         }
-        //     }
-        // }
-
         
     }
     

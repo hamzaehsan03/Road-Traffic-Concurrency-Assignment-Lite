@@ -30,12 +30,23 @@ public class Main {
         entryPoint.start();
 
         try
-        {
+         {
             clock.join();
-            entryPoint.interrupt();
-            junctionA.interrupt();
-            industrial.interrupt();
+        } catch (InterruptedException e)
+        {
+            Thread.currentThread().interrupt();
+        }
 
+        entryPoint.interrupt();
+        junctionA.interrupt();
+        industrial.interrupt();
+
+        // entryPoint.shutdown();
+        // junctionA.shutdown();
+        // industrial.shutdown();
+
+        try
+        {
             entryPoint.join();
             junctionA.join();
             industrial.join();
@@ -45,7 +56,30 @@ public class Main {
             Thread.currentThread().interrupt();
         }
 
+        finalReport(entryRoad, exitRoad, industrial);
 
+
+    }
+
+    private static void finalReport(Road entryRoad, Road exitRoad, CarPark industrial)
+    {
+        int totalCreated = EntryPoint.getTotalCreated();
+        int totalParked = industrial.getTotalParked();
+        int totalQueued = entryRoad.getCount() + exitRoad.getCount();
+
+        System.out.println("Final Simulation Report:");
+        System.out.println("Total Cars Created: " + totalCreated);
+        System.out.println("Total Cars Parked: " + totalParked);
+        System.out.println("Total Cars Queued: " + totalQueued);
+
+        if(totalCreated == (totalParked + totalQueued))
+        {
+            System.out.println("All cars accounted for");
+        }
+        else
+        {
+            System.out.println("Mismatch");
+        }
     }
 
     

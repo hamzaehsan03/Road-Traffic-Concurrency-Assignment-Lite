@@ -22,7 +22,7 @@ public class Road {
 
             if (added)
             {
-                System.out.println("Vehicle added to road. Current road count: " + count);
+                //System.out.println("Vehicle added to road. Current road count: " + count);
             }
         }
 
@@ -36,7 +36,7 @@ public class Road {
             Vehicle vehicle = vehicles[head];
             if (vehicle != null)
             {
-                System.out.println("Vehicle removed from road. Current road count: " + count);
+                //System.out.println("Vehicle removed from road. Current road count: " + count);
             }
             head = (head + 1) % vehicles.length;
             count--;
