@@ -1,6 +1,6 @@
 class {:autocontracts} CarPark
 {
-    var parkedCars: set <string> // cars currently parked
+    var parkedCars: set <nat> // cars currently parked
     var totalCapacity: nat
 
     ghost predicate Valid()
@@ -18,7 +18,7 @@ class {:autocontracts} CarPark
         parkedCars := {};
     }
 
-    method enterCarPark(car: string) returns (success: bool)
+    method enterCarPark(car: nat) returns (success: bool)
     modifies this
 
     // if success is true, the car was not already parked and the number of parked cars doesn't exceed capacity
@@ -46,7 +46,7 @@ class {:autocontracts} CarPark
         }
     }
 
-    method leaveCarPark(car: string) returns (success: bool)
+    method leaveCarPark(car: nat) returns (success: bool)
     modifies this
     
     // If success is true, the car in the parkedCars set is removed
@@ -99,7 +99,7 @@ method Main()
 
         // Attempt to park a car
         print "Attempting to park a car\n";
-        var success := carpark.enterCarPark("A");
+        var success := carpark.enterCarPark(1);
         if (success) 
         {
             print "Parked successfully.\n";
@@ -112,7 +112,7 @@ method Main()
 
         // Attempt to park a second car
         print "Attempting to park another car\n";
-        success := carpark.enterCarPark("B");
+        success := carpark.enterCarPark(2);
         if (success) 
         {
             print "Another car parked successfully.\n";
@@ -125,14 +125,14 @@ method Main()
 
         // Attempt to leave the car park
         print "Attempting to leave the car park\n";
-        success := carpark.leaveCarPark("A");
+        success := carpark.leaveCarPark(1);
         if (success) 
         {
-            print "Car A left the car park\n";
+            print "Car 1 left the car park\n";
         } 
         else 
         {
-            print "Car A couldn't leave the car park\n";
+            print "Car 1 couldn't leave the car park\n";
         }
         carpark.printParkingPlan();
     }
