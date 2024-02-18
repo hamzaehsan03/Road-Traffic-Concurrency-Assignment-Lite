@@ -9,8 +9,7 @@ class {:autocontracts} CarPark
     reads this
     {
         // fixed total capacity
-        |parkedCars| <= totalCapacity &&
-        parkedCars * subscriptions == {}
+        |parkedCars| <= totalCapacity 
     }
 
     constructor()
@@ -20,44 +19,37 @@ class {:autocontracts} CarPark
         subscriptions := {};
     }
 
-    method enterCarPark(car : string) returns (success: bool)
-
-        modifies this
-        ensures car in old(parkedCars) ==> success == false
-        ensures old(|parkedCars|) >= totalCapacity - reservedCapacity && car !in subscriptions ==> !success
-        ensures !success ==> parkedCars == old(parkedCars)
-        ensures car !in old(parkedCars) && (old(|parkedCars|) < totalCapacity || car in subscriptions) ==> success && (parkedCars == old(parkedCars) + {car})
-
+    method enterCarPark(car: string) returns (success: bool)
+    modifies this
+    ensures Valid()
+    {
+        if (car in parkedCars) 
         {
-            if (car in parkedCars || (|parkedCars| >= totalCapacity - reservedCapacity && car !in subscriptions))
-            {
-                success := false; 
-            }
-            else
-            {
-                parkedCars := parkedCars + {car};
-                success := true;
-            }
-                
+            return false;
+        } 
+        else if (|parkedCars| < totalCapacity) {
+            parkedCars := parkedCars + {car};
+            return true;
+        } 
+        else 
+        {
+            return false;
         }
+    }
 
     method leaveCarPark(car: string) returns (success: bool)
-    
-        modifies this
-        ensures car !in parkedCars ==> !success
-        ensures car in parkedCars ==> success && parkedCars == old(parkedCars) - {car}
-
-        {
-            if (car in parkedCars) 
-            {
-                parkedCars := parkedCars - {car};
-                success := true;
-            } 
-            else 
-            {
-                success := false;
-            }
+    modifies this
+    ensures success ==> car in old(parkedCars) && parkedCars == old(parkedCars) - {car} // If success, car was in parkedCars and is now removed
+    ensures !success ==> car !in old(parkedCars) // If not success, car was not in parkedCars to begin with
+    ensures parkedCars == (if car in old(parkedCars) then old(parkedCars) - {car} else old(parkedCars)) // Explicitly stating result
+    {
+        if (car in parkedCars) {
+            parkedCars := parkedCars - {car};
+            return true;
+        } else {
+            return false;
         }
+    }
 
     method checkAvailability() returns (availableSpaces: nat)
     {
