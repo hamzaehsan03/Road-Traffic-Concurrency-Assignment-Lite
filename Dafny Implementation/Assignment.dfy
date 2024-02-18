@@ -77,4 +77,62 @@ class {:autocontracts} CarPark
         return totalCapacity - |parkedCars|;
     }
 
+    // Method to evaluate to true when the invariants hold (if there's less parked cars than the capacity)
+    method valid() returns (isValid: bool)
+    {
+        return |parkedCars| <= totalCapacity;
+    }
+
+    method printParkingPlan()
+    {
+        print "Total Capacity: ", totalCapacity, "\n";
+        print "Parked Cars: ", parkedCars, "\nAvailable Space: ", totalCapacity - |parkedCars|, "\n";
+    }
+
 }
+
+method Main()
+    {
+        var carpark: CarPark := new CarPark();
+        // Assume the car park has a capacity of 10
+        carpark.totalCapacity := 10; 
+
+        // Attempt to park a car
+        print "Attempting to park a car\n";
+        var success := carpark.enterCarPark("A");
+        if (success) 
+        {
+            print "Parked successfully.\n";
+        } 
+        else 
+        {
+            print "Failed to park\n";
+        }
+        carpark.printParkingPlan();
+
+        // Attempt to park a second car
+        print "Attempting to park another car\n";
+        success := carpark.enterCarPark("B");
+        if (success) 
+        {
+            print "Another car parked successfully.\n";
+        } 
+        else 
+        {
+            print "Failed to park another car\n";
+        }
+        carpark.printParkingPlan();
+
+        // Attempt to leave the car park
+        print "Attempting to leave the car park\n";
+        success := carpark.leaveCarPark("A");
+        if (success) 
+        {
+            print "Car A left the car park\n";
+        } 
+        else 
+        {
+            print "Car A couldn't leave the car park\n";
+        }
+        carpark.printParkingPlan();
+    }
