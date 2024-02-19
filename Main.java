@@ -34,8 +34,8 @@ public class Main {
         CarPark industrial = new CarPark(exitRoad, carParkCapacity, "Industrial Park", clock);      
         EntryPoint entryPoint = new EntryPoint(entryRoad, entryRate, "Industrial Park", clock);
 
-        // System.out.println(entryRate);
-        // System.out.println(greenDuration);
+        System.out.println(entryRate);
+        System.out.println(greenDuration);
 
         clock.setIndustrial(industrial);
         
@@ -83,9 +83,10 @@ public class Main {
         long totalParkedTime = industrial.getTotalParkedTime();
         int totalQueued = entryRoad.getCount() + exitRoad.getCount();
 
-        long averageJourneyTime = totalParked > 0 ? totalParkedTime / totalParked : 0;
-        long avgMinutes = averageJourneyTime / 60000; // Convert milliseconds to minutes
-        long avgSeconds = (averageJourneyTime % 60000) / 1000; 
+        long averageJourneyTimeMs = totalParked > 0 ? totalParkedTime / totalParked : 0;
+        long avgMinutes = (averageJourneyTimeMs / 1000) / 60; 
+        long avgSeconds = (averageJourneyTimeMs / 1000) % 60; 
+
         System.out.printf("Industrial: %d Cars parked, average journey time %dm%ds\n", totalParked, avgMinutes, avgSeconds);
     
 
@@ -164,5 +165,4 @@ public class Main {
         }   
     }
 
-    
 }

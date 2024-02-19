@@ -33,12 +33,13 @@ public class CarPark extends Thread {
                 if (vehicle != null)
                 {
                     //System.out.println(parkName + ": Car attempting to park at " + clock.getCurrentTime()/1000 + " seconds.");
-                    long parkTimeElapsed = clock.getCurrentTime();
+                    long parkTimeElapsed = clock.getCurrentTime()/1000;
+                    long journeyTime = parkTimeElapsed - vehicle.getEntryTime();
                     vehicle.setParkTime(parkTimeElapsed);
-                    parkedTime += parkTimeElapsed - vehicle.getEntryTime();
-                    totalParkedTime += parkedTime;
+
+                    totalParkedTime += journeyTime;
                     totalParked++;
-                    
+
 
                     //System.out.println(parkName + ": Car parked at " + clock.getCurrentTime()/1000 + " seconds. Total cars parked: " + totalParked);
                     
@@ -93,7 +94,7 @@ public class CarPark extends Thread {
     {
         return capacity - totalParked;
     }
-    
+
     public long getTotalParkedTime()
     {
         return totalParkedTime;
