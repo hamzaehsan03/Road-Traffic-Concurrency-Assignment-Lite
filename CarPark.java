@@ -5,6 +5,7 @@ public class CarPark extends Thread {
     private final String parkName;
     private int totalParked = 0;
     private long parkedTime = 0;
+    private long totalParkedTime = 0;
     private final Clock clock;
     private volatile boolean running = true;
 
@@ -35,6 +36,7 @@ public class CarPark extends Thread {
                     long parkTimeElapsed = clock.getCurrentTime();
                     vehicle.setParkTime(parkTimeElapsed);
                     parkedTime += parkTimeElapsed - vehicle.getEntryTime();
+                    totalParkedTime += parkedTime;
                     totalParked++;
                     
 
@@ -75,13 +77,6 @@ public class CarPark extends Thread {
          
         }
         
-        //long avgParkTime = totalParked > 0 ? parkedTime / totalParked : 0;
-        //System.out.println(parkName + ": " + totalParked + " Cars parked. Average parking time: " + (avgParkTime/1000)/60 + "m " + (avgParkTime/1000)%60 + "s");
-
-        // FinalLog = String.format("%d: %d Cars Parked. Average parking time: %dm%ds", (parkName, totalParked, (avgParkTime/1000)/60, (avgParkTime/1000) % 60));
-        // System.out.println(FinalLog);
-        // logMessage = String.format("Time: %dm%ds - %s: 0 cars through, %d cars waiting. GRIDLOCK", (currentTime / 1000) / 60,
-        //             (currentTime / 1000) % 60, junctionName, entryRoad.getCount());
     }
 
     public int getCapacity()
@@ -97,5 +92,10 @@ public class CarPark extends Thread {
     public int getAvailableSpaces()
     {
         return capacity - totalParked;
+    }
+    
+    public long getTotalParkedTime()
+    {
+        return totalParkedTime;
     }
 }

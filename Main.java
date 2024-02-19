@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args)
     {
         
-        String filePath = (".\\Task 1 Scenarios\\Scenario4.txt");
+        String filePath = (".\\Task 1 Scenarios\\Scenario1.txt");
         readConfigFile(filePath);
         System.out.println("Reading from Config file");
         outputConfig(filePath);
@@ -80,7 +80,14 @@ public class Main {
     {
         int totalCreated = EntryPoint.getTotalCreated();
         int totalParked = industrial.getTotalParked();
+        long totalParkedTime = industrial.getTotalParkedTime();
         int totalQueued = entryRoad.getCount() + exitRoad.getCount();
+
+        long averageJourneyTime = totalParked > 0 ? totalParkedTime / totalParked : 0;
+        long avgMinutes = averageJourneyTime / 60000; // Convert milliseconds to minutes
+        long avgSeconds = (averageJourneyTime % 60000) / 1000; 
+        System.out.printf("Industrial: %d Cars parked, average journey time %dm%ds\n", totalParked, avgMinutes, avgSeconds);
+    
 
         System.out.println("Final Simulation Report:");
         System.out.println("Total Cars Created: " + totalCreated);
