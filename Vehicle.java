@@ -1,7 +1,6 @@
 public class Vehicle
 {
-    // Class to store relevant information about the vehicles
-    private String destination;
+        private String destination;
     private long entryTime;
     private long parkTime;
 

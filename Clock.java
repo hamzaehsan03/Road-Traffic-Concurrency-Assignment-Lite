@@ -1,6 +1,6 @@
 public class Clock extends Thread {
 
-    private final long duration; // Simulation duration, 1 hour in this case
+    private final long duration; // Simulation duration
     private final long tickDuration; // Real time duration of the simulation, 1s real to 10s simulated
     private long currentTime = 0; // Start at 0
 
@@ -33,7 +33,6 @@ public class Clock extends Thread {
                 synchronized(this)
                 {
                     currentTime += tickDuration * 10;
-                    //currentTime++;
                     this.notifyAll();
                 }
 
@@ -76,9 +75,6 @@ public class Clock extends Thread {
             }
         }
     }
-    // public synchronized void waitForNextTick(long additionalTime) throws InterruptedException 
-    // {
-    //     wait(additionalTime); // Wait for additional time in milliseconds.
-    // }
+
 
 }

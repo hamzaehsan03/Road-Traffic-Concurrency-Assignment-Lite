@@ -24,7 +24,7 @@ public class Main {
         int carParkCapacity = 1000;
         //long greenDuration = 60;
         long simDuration = 3600000; // 3,600,000
-        long tickDuration = 1000; // 3 600 000 /1000 = 3600 多分
+        long tickDuration = 1000; // 3 600 000 /1000 = 3600 
 
         Clock clock = new Clock(simDuration, tickDuration);
         Road entryRoad = new Road(roadCapacity);

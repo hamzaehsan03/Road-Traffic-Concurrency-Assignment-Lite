@@ -1,7 +1,5 @@
 public class EntryPoint extends Thread {
     
-    // Class to generate vehicles
-
     private final Road road;
     private final int carsPH;
     private final String destination;

@@ -46,7 +46,6 @@ public class Junction extends Thread {
         while(running && !Thread.currentThread().isInterrupted())
         {
             long currentTime = clock.getCurrentTime();
-            //long elapsedTime = currentTime - greenLightStart;
             if ((currentTime - greenLightStart) >= greenDuration * 1000)
             {
                 // Change the light
@@ -57,10 +56,7 @@ public class Junction extends Thread {
                     greenLightStart = currentTime;
                     carsPassed = 0;
                 }
-                //greenLightStart = currentTime;
 
-                // Reset the amount of cars that passed the light per cycle
-                //carsPassed = 0;
             }
 
             if (isGreen)
